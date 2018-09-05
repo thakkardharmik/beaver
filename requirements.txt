@@ -1,0 +1,16 @@
+requests_kerberos==0.12.0
+jsonpath_rw==1.4.0
+selenium==3.5.0
+pycurl==latest
+taskreporter==0.1.0.60
+click==6.7
+requests==2.18.4
+setuptools==18.5
+paramiko==2.4.1
+decorator==4.3.0
+pytest==2.8.0
+Cheetah==2.4.4
+pexpect==4.6.0
+tools==0.1.9
+xlwt==1.3.0
+PyYAML>=3.13

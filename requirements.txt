@@ -1,8 +1,8 @@
 requests_kerberos==0.12.0
 jsonpath_rw==1.4.0
 selenium==3.5.0
-pycurl==latest
-taskreporter==0.1.0.60
+pycurl
+taskreporter==0.0.1.74
 click==6.7
 requests==2.18.4
 setuptools==18.5

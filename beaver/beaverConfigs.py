@@ -472,11 +472,17 @@ def setHadoopLinuxConfigs():
     logger.info("the current dir is set to %s", CURRENT_DIR)
 
     #  if this file exists assume you are on bigtop
-    if os.path.isfile('/etc/hadoop/conf/core-site.xml'):
+    if Machine.pathExists(Machine.getAdminUser(),
+                          Config.get("machine", "GATEWAY"),
+                          '/etc/hadoop/conf/core-site.xml',
+                          Machine.getAdminPasswd()):
         logger.info("/etc/hadoop/conf/core-site.xml is present, stack install was passed.")
         Config.set('hadoop', 'HADOOP_CONF', '/etc/hadoop/conf', overwrite=False)
         Config.set('hadoop', 'HADOOP_HOME', '%s/current/hadoop-client' % CURRENT_DIR, overwrite=False)
-    elif os.path.isfile('/etc/hadoop/core-site.xml'):
+    elif Machine.pathExists(Machine.getAdminUser(),
+                          Config.get("machine", "GATEWAY"),
+                          '/etc/hadoop/core-site.xml',
+                          Machine.getAdminPasswd()):
         logger.info("/etc/hadoop/core-site.xml is present, stack install was passed.")
         Config.set('hadoop', 'HADOOP_CONF', '/etc/hadoop', overwrite=False)
         Config.set('hadoop', 'HADOOP_HOME', '/usr', overwrite=False)
@@ -1214,7 +1220,10 @@ def setStormConfigs():
 
 def get_first_existing_path(*paths):
     for one_path in paths:
-        if os.path.exists(one_path):
+        if Machine.pathExists(Machine.getAdminUser(),
+                              Config.get("machine", "GATEWAY"),
+                              one_path,
+                              Machine.getAdminPasswd()):
             return one_path
     return None
 

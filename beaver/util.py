@@ -844,7 +844,12 @@ def writePropertiesToConfigJSONFileMulti(infile, outfile, pathPropertiesList, lo
 # key - property name
 def getPropertyValueFromFile(propfile, key):
     try:
-        proptext = open(propfile).read()
+        from machine import Machine
+        from config import Config
+        tmp_file = os.path.join(Machine.getTempDir(), propfile.split("/")[-1])
+        gateway = Config.get("machine", "GATEWAY")
+        Machine.copyToLocal(Machine.getAdminUser(), gateway, propfile, tmp_file)
+        proptext = open(tmp_file).read()
         return getPropertyValue(proptext, key)
     except IOError:
         logger.info("Error: File Not Found")

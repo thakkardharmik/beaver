@@ -162,6 +162,11 @@ class BaseMachine(object):
     # In Windows, use command prompt to run the command.
     @classmethod
     def run(cls, cmd, cwd=None, env=None, logoutput=True, retry_count=0, retry_sleep_time=10):
+        if not cmd.startswith("ssh -i") and not cmd.startswith("scp "):
+            cmd = cls._buildcmd(cmd,
+                          Machine.getAdminUser(),
+                          Config.get("machine", "GATEWAY"),
+                          Machine.getAdminPasswd(), env=env)
         for i in range(0, retry_count + 1):
             demarkation = "|GUID=" + str(uuid.uuid4()) + "|"
             cmd = cls._decoratedcmd(cmd)

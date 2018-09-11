@@ -8,7 +8,7 @@ requests==2.18.4
 setuptools==18.5
 paramiko==2.4.1
 decorator==4.3.0
-pytest==2.8.0
+pytest==2.8.7
 Cheetah==2.4.4
 pexpect==4.6.0
 tools==0.1.9

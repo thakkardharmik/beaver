@@ -897,7 +897,8 @@ class Kafka:
         principles_opt = "--allow-principal %s" % principles
         operation_opt = "--operation %s" % operation
         cmd = " ".join([auth_prop, add_remove_opt, principles_opt, operation_opt, extraOpt, permission_opt])
-        return cls.runas(cmd=cmd, shell_file="kafka-acls.sh", user=user)
+        ambari_node = Config.get("machine", "GATEWAY")
+        return cls.runas(cmd=cmd, host=ambari_node, shell_file="kafka-acls.sh", user=user)
 
     @classmethod
     def grantAllPermissionOnTopic(cls, topicName):

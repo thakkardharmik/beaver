@@ -102,59 +102,16 @@ class Zookeeper(object):
         if cls._zkHosts and len(cls._zkHosts) >= 3:
             return cls._zkHosts
 
-        cls._zkHosts = []
-        try:
-            file_obj = open(ZOO_CFG_FILE, 'r')
-            if Machine.isHumboldt():
-                try:
-                    from beaver.component.hbase import HBase
-                    hmaster_nodes = HBase.getAllMasterNodes()
-                    if hmaster_nodes:
-                        zkNode = hmaster_nodes[0]
-                    if zkNode:
-                        Machine.copyToLocal(None, zkNode, ZOO_CFG_FILE, Machine.getTempDir())
-                        REMOTE_ZOO_CFG_FILE = os.path.join(Machine.getTempDir(), 'zoo.cfg')
-                        file_obj = open(REMOTE_ZOO_CFG_FILE, 'r')
-                except Exception:
-                    pass
-            try:
-                for line in file_obj:
-                    if re.search('server.[0-9]*=', line) is not None:
-                        cls._zkHosts.append(re.split(':', re.split('=', line)[1])[0])
-                    elif re.search('clientPort=', line) is not None:
-                        cls._zkPort = re.split('=', line)[1].strip()
-                if not cls._zkHosts:
-                    cls._zkHosts.append('localhost')
-            finally:
-                file_obj.close()
-        except IOError as e:
-            print("\n\n I/O Error reading file {0} with Error({1}): {2} \n").format(ZOO_CFG_FILE, e.errno, e.strerror)
-            if ignoreError is False:
-                sys.exit(1)
-            else:
-                return ""
+        cls._zkHosts = Ambari.getHostsForComponent('ZOOKEEPER_SERVER')
         return cls._zkHosts
 
     @classmethod
     def getZKPort(cls):
         if not cls._zkPort:
-            if not Machine.isHumboldt():
-                try:
-                    file_obj = open(ZOO_CFG_FILE, 'r')
-                    for line in file_obj:
-                        if re.search('clientPort=', line) is not None:
-                            cls._zkPort = re.split('=', line)[1].strip()
-
-                #TODO: return inside finally will eatup all exception. Need to fix.
-
-                finally:
-                    return cls._zkPort  # pylint: disable=lost-exception
-
-            else:
-                from beaver.component.hadoop import YARN
-                return YARN.getZKPortfromyarnsite()
-        else:
-            return cls._zkPort
+            zoo_props = Ambari.getConfig("zoo.cfg")
+            if zoo_props:
+                cls._zkPort = zoo_props["clientPort"]
+        return cls._zkPort
 
     @classmethod
     def getVersion(cls):

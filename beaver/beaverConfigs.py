@@ -731,10 +731,13 @@ def setSliderConfigs():
 
 def setKafkaConfigs():
     if Machine.type() == 'Linux':
+        '''
         kafka_home = get_first_existing_path('/usr/hdf/current/kafka-broker', '/usr/hdp/current/kafka-broker')
         if not kafka_home:
             logger.info("Kafka not installed on cluster")
             return
+        '''
+        kafka_home = '/usr/hdp/current/kafka-broker'
         Config.set('kafka', 'KAFKA_HOME', kafka_home, overwrite=False)
         Config.set('kafka', 'KAFKA_ADMIN', 'kafka', overwrite=False)
         Config.set('kafka', 'KAFKA_CONF', '/etc/kafka/conf', overwrite=False)

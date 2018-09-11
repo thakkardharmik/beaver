@@ -543,7 +543,12 @@ def writeToPlotfile(textToWrite, plotfile):
 # name - Property name
 # default - Property value in case not found
 def getPropertyValueFromConfigXMLFile(xmlfile, name, defaultValue=None):
-    xmldoc = minidom.parse(xmlfile)
+    tmp_xml = os.path.join("/tmp", xmlfile.split("/")[-1])
+    from machine import Machine
+    from config import Config
+    gateway = Config.get("machine", "GATEWAY")
+    Machine.copyToLocal(Machine.getAdminUser(), gateway, xmlfile, tmp_xml)
+    xmldoc = minidom.parse(tmp_xml)
     propNodes = [
         node.parentNode for node in xmldoc.getElementsByTagName("name") if node.childNodes[0].nodeValue == name
     ]

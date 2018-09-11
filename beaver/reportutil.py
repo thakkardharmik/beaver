@@ -487,7 +487,9 @@ def generateTestReportConf(infile, outfile, results, startTime, endTime):
                     kerberos_server_type = 'mit'
                     # add a check for AD
                     if Machine.isLinux():
-                        f = open('/etc/krb5.conf', 'r')
+                        gateway = Config.get("machine", "GATEWAY")
+                        Machine.copyToLocal(Machine.getAdminUser(), gateway, '/etc/krb5.conf', '/tmp/krb5.conf')
+                        f = open('/tmp/krb5.conf', 'r')
                         txt = f.read()
                         f.close()
                         #Finding all the admin_server in the krb5.conf with ports, if any

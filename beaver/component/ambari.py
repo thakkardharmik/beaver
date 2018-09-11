@@ -87,7 +87,8 @@ class Ambari(object):
         elif Machine.getInstaller() == 'cloudbreak':
             cls._host = Config.get('machine', 'GATEWAY')
         else:
-            cls._host = Config.get('ambari', 'HOST', socket.gethostbyname(socket.gethostname()))
+            cls._host = Config.get('machine', 'GATEWAY')
+            #cls._host = Config.get('ambari', 'HOST', socket.gethostbyname(socket.gethostname()))
         return cls._host
 
     @classmethod

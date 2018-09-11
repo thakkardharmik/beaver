@@ -300,6 +300,8 @@ class BaseMachine(object):
         :param doEscapeQuote:
         :return:
         """
+        if host is None:
+            host = Config.get("machine", "GATEWAY")
         if not isLoggedOnUser(user):
             cmd = cls.sudocmd(cmd, user, passwd, env=env, doEscapeQuote=doEscapeQuote)
         if not cls.isSameHost(host):
